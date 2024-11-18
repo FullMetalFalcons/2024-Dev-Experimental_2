@@ -16,7 +16,7 @@ import java.util.Locale;
 @TeleOp
 public class Experimental2TeleOp extends LinearOpMode {
     //Initialize motors, servos, sensors, imus, etc.
-    DcMotorEx m1, m2, m3, m4, arm;
+    DcMotorEx m1, m2, m3, m4, arm, extender5000;
 //    Servo Claw;
 
 
@@ -30,6 +30,7 @@ public class Experimental2TeleOp extends LinearOpMode {
         m3 = (DcMotorEx) hardwareMap.dcMotor.get("back_left");
         m4 = (DcMotorEx) hardwareMap.dcMotor.get("back_right");
         arm = (DcMotorEx) hardwareMap.dcMotor.get("arm");
+        extender5000 = (DcMotorEx) hardwareMap.dcMotor.get("extender5000");
 //        Slide = (DcMotorEx) hardwareMap.dcMotor.get("slide");
 //        Hanger = (DcMotorEx) hardwareMap.dcMotor.get("linearActuator");
 //
@@ -123,6 +124,18 @@ public class Experimental2TeleOp extends LinearOpMode {
             } else {
                 // At Rest
                 arm.setPower(0);
+            }
+
+            // Extender5000 Code
+            if (gamepad1.left_bumper) {
+                // Arm Up
+                extender5000.setPower(-.5);
+            } else if (gamepad1.left_trigger > 0) {
+                // Arm Down
+                extender5000.setPower(.5);
+            } else {
+                // At Rest
+                extender5000.setPower(0);
             }
 //
 //            // Slide Code
