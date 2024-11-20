@@ -17,7 +17,8 @@ import java.util.Locale;
 public class Experimental2TeleOp extends LinearOpMode {
     //Initialize motors, servos, sensors, imus, etc.
     DcMotorEx m1, m2, m3, m4, arm, extender5000;
-//    Servo Claw;
+    Servo claw, wrist;
+
 
 
 
@@ -31,6 +32,10 @@ public class Experimental2TeleOp extends LinearOpMode {
         m4 = (DcMotorEx) hardwareMap.dcMotor.get("back_right");
         arm = (DcMotorEx) hardwareMap.dcMotor.get("arm");
         extender5000 = (DcMotorEx) hardwareMap.dcMotor.get("extender5000");
+
+        claw = hardwareMap.servo.get("claw");
+        wrist = hardwareMap.servo.get("wrist");
+
 //        Slide = (DcMotorEx) hardwareMap.dcMotor.get("slide");
 //        Hanger = (DcMotorEx) hardwareMap.dcMotor.get("linearActuator");
 //
@@ -77,6 +82,18 @@ public class Experimental2TeleOp extends LinearOpMode {
 
         waitForStart();
 
+        // Move to one extreme (might not be exactly 0 degrees)
+        wrist.setPosition(-1);
+        sleep(1000); // Wait for servo to move
+
+        // Move to the other extreme (might not be exactly 270 degrees)
+        wrist.setPosition(1.0);
+        sleep(1000);
+
+        // Move to the middle position (approximately 135 degrees)
+        wrist.setPosition(0.0);
+        sleep(1000);
+
         while(opModeIsActive()) {
             // Mecanum drive code
             double px = 0.0;
@@ -114,13 +131,14 @@ public class Experimental2TeleOp extends LinearOpMode {
             m4.setPower(p4);
 
 
+
             // Arm Code
             if (gamepad1.right_bumper) {
                 // Arm Up
-                arm.setPower(-.5);
+                arm.setPower(-1);
             } else if (gamepad1.right_trigger > 0) {
                 // Arm Down
-                arm.setPower(.5);
+                arm.setPower(1);
             } else {
                 // At Rest
                 arm.setPower(0);
@@ -129,14 +147,29 @@ public class Experimental2TeleOp extends LinearOpMode {
             // Extender5000 Code
             if (gamepad1.left_bumper) {
                 // Arm Up
-                extender5000.setPower(-.5);
+                extender5000.setPower(-1);
             } else if (gamepad1.left_trigger > 0) {
                 // Arm Down
-                extender5000.setPower(.5);
+                extender5000.setPower(1);
             } else {
                 // At Rest
                 extender5000.setPower(0);
             }
+
+            if (gamepad1.a) {
+                claw.setPosition(0.1);
+            }
+            if (gamepad1.x) {
+                claw.setPosition(0.7);
+            }
+
+            if (gamepad1.y) {
+                wrist.setPosition(-1);
+            }
+            if (gamepad1.b) {
+                wrist.setPosition(1);
+            }
+
 //
 //            // Slide Code
 //            if (gamepad1.left_bumper) {
